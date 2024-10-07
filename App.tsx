@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -6,113 +7,93 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import HomeScreen from './src/screens/HomeScreen';
+import DiscoverScreen from './src/screens/DiscoverScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import BookmarkScreen from './src/screens/BookmarkScreen';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
+  HomeIcon as HomeIconOutline,
+  BookmarkIcon as BookmarkIconOutline,
+  GlobeAltIcon as GlobeAltIconOutline,
+  UserIcon as UserIconOutline,
+} from 'react-native-heroicons/outline';
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  HomeIcon,
+  BookmarkIcon,
+  GlobeAltIcon,
+  UserIcon,
+} from 'react-native-heroicons/solid';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const Tab = createMaterialBottomTabNavigator();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+// Utility function to get the appropriate icon (solid/outline) based on focus
+const getTabBarIcon = (
+  focused: boolean,
+  SolidIcon: React.ComponentType<any>,
+  OutlineIcon: React.ComponentType<any>,
+) => {
+  const IconComponent = focused ? SolidIcon : OutlineIcon;
+  const color = focused ? '#FFF' : '#000';
+  return <IconComponent color={color} size={24} />;
+};
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const tabs = [
+    {
+      name: 'HomeScreen',
+      component: HomeScreen,
+      label: 'Home',
+      solidIcon: HomeIcon,
+      outlineIcon: HomeIconOutline,
+    },
+    {
+      name: 'DiscoverScreen',
+      component: DiscoverScreen,
+      label: 'Discover',
+      solidIcon: GlobeAltIcon,
+      outlineIcon: GlobeAltIconOutline,
+    },
+    {
+      name: 'BookmarkScreen',
+      component: BookmarkScreen,
+      label: 'Bookmark',
+      solidIcon: BookmarkIcon,
+      outlineIcon: BookmarkIconOutline,
+    },
+    {
+      name: 'ProfileScreen',
+      component: ProfileScreen,
+      label: 'Profile',
+      solidIcon: UserIcon,
+      outlineIcon: UserIconOutline,
+    },
+  ];
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator
+        activeColor="#000"
+        inactiveColor="#000"
+        activeIndicatorStyle={{backgroundColor: '#000'}}
+        barStyle={{backgroundColor: 'white'}}
+        initialRouteName="HomeScreen">
+        {tabs.map((tab, index) => (
+          <Tab.Screen
+            key={index}
+            name={tab.name}
+            component={tab.component}
+            options={{
+              tabBarLabel: tab.label,
+              tabBarIcon: ({focused}) =>
+                getTabBarIcon(focused, tab.solidIcon, tab.outlineIcon),
+            }}
+          />
+        ))}
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
