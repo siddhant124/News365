@@ -9,7 +9,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import HomeScreen from './src/screens/HomeScreen';
+import HomeScreen from './src/screens/home/HomeScreen';
 import DiscoverScreen from './src/screens/DiscoverScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import BookmarkScreen from './src/screens/BookmarkScreen';
@@ -76,7 +76,7 @@ function App(): React.JSX.Element {
       <Tab.Navigator
         activeColor="#000"
         inactiveColor="#000"
-        activeIndicatorStyle={{backgroundColor: '#000'}}
+        activeIndicatorStyle={{backgroundColor: '#0B86E7'}}
         barStyle={{backgroundColor: 'white'}}
         initialRouteName="HomeScreen">
         {tabs.map((tab, index) => (

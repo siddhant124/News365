@@ -42,7 +42,7 @@ export class ApiService {
         data: requestData,
       });
       // Log the response data for debugging purposes
-      console.info('Response:', JSON.stringify(response.data, null, 2));
+      // console.info('Response:', JSON.stringify(response.data, null, 2));
       return {
         successStatus: {statusCode: response.status, isSuccessful: true},
         body: response.data,

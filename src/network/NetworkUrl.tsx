@@ -10,4 +10,4 @@ export async function getURL(endpoint: string): Promise<string> {
 }
 
 // URLs
-export const BASE_URL = 'https://newsapi.org/v2/';
+export const BASE_URL = 'https://newsapi.org/v2';
