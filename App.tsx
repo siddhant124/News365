@@ -43,8 +43,6 @@ function App(): React.JSX.Element {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-          statusBarColor: '#FFF',
-          statusBarStyle: 'dark',
         }}>
         {userDetails ? (
           // If the user is logged in, navigate to the Dashboard
