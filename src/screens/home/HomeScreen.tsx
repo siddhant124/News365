@@ -3,7 +3,14 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BellIcon} from 'react-native-heroicons/outline';
-import {Text, View, ActivityIndicator, FlatList} from 'react-native';
+import {
+  Text,
+  View,
+  ActivityIndicator,
+  FlatList,
+  StatusBar,
+  ScrollView,
+} from 'react-native';
 import BasicCarousel from 'react-native-sg-basic-carousel';
 import NewsViewModel from '../../api/viewmodel/NewsViewModel';
 import {category} from '../../type/Datatype';
@@ -84,7 +91,11 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.parentView}>
+      <StatusBar backgroundColor={'#FFF'} barStyle={'dark-content'} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        style={styles.parentView}>
         <View style={styles.headerContainer}>
           <View style={styles.bellIconContainer}>
             <BellIcon color={'#000'} size={20} />
@@ -117,7 +128,7 @@ export default function HomeScreen() {
             />
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

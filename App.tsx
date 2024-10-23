@@ -3,15 +3,19 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Text, View, StyleSheet} from 'react-native';
 import LoginScreen from './src/screens/login/LoginScreen';
 import SignUpScreen from './src/screens/login/SignUpScreen';
 import {auth} from './src/config/FirebaseConfig';
 import DashboardTabNavigation from './src/navigation/DashboardStackNavigation';
+import NetInfo from '@react-native-community/netinfo';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
+  const [isInternetAvailable, setIsInternetAvailable] = useState(true);
+
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [userDetails, setUserDetails] = useState(null);
@@ -23,6 +27,13 @@ function App(): React.JSX.Element {
       setInitializing(false);
     }
   }
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsInternetAvailable(state?.isConnected ?? false);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
@@ -39,27 +50,54 @@ function App(): React.JSX.Element {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        {userDetails ? (
-          // If the user is logged in, navigate to the Dashboard
-          <Stack.Screen
-            name="DashboardTabNavigation"
-            component={DashboardTabNavigation}
-          />
-        ) : (
-          // Otherwise, navigate to the login screens
-          <>
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
-            <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={{flex: 1}}>
+      {/* Notification banner at the top if the internet is not available */}
+      {!isInternetAvailable && (
+        <View style={styles.notificationBanner}>
+          <Text style={styles.bannerText}>No Internet Connection</Text>
+        </View>
+      )}
+
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          {userDetails ? (
+            // If the user is logged in, navigate to the Dashboard
+            <Stack.Screen
+              name="DashboardTabNavigation"
+              component={DashboardTabNavigation}
+            />
+          ) : (
+            // Otherwise, navigate to the login screens
+            <>
+              <Stack.Screen name="LoginScreen" component={LoginScreen} />
+              <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
 
 export default App;
+
+// Styles for the notification banner
+const styles = StyleSheet.create({
+  notificationBanner: {
+    backgroundColor: '#ff3b30', // Red color for alert
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    zIndex: 1, // Ensure it appears on top of other components
+  },
+  bannerText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+});
