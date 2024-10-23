@@ -7,6 +7,7 @@ import {
   TextInput,
   SafeAreaView,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import React, {useState} from 'react';
 import {Colors} from '../../constants/Colors';
@@ -38,95 +39,76 @@ export default function SignUpScreen({navigation}: {navigation: any}) {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: '#FFF',
-      }}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
+      <StatusBar backgroundColor={'#FFF'} barStyle={'dark-content'} />
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
+        contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}
         style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <ArrowLongLeftIcon
-            color={'#000'}
-            style={{
-              padding: 16,
-            }}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Create New Account</Text>
+        <View>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ArrowLongLeftIcon color={'#000'} style={{padding: 16}} />
+          </TouchableOpacity>
 
-        {/* User Full Name */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.labelText}>Full Name</Text>
-          <TextInput
-            inputMode="text"
-            style={styles.input}
-            placeholder="Enter Full Name"
-            onChangeText={event => {
-              setUserName(event);
-            }}
-          />
+          <Text style={styles.headerText}>Create New Account</Text>
+
+          {/* User Full Name */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.labelText}>Full Name</Text>
+            <TextInput
+              inputMode="text"
+              style={styles.input}
+              placeholder="Enter Full Name"
+              onChangeText={event => setUserName(event)}
+            />
+          </View>
+
+          {/* User Email */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.labelText}>Email</Text>
+            <TextInput
+              keyboardType="email-address"
+              style={styles.input}
+              placeholder="Enter Email"
+              onChangeText={event => setUserEmail(event)}
+            />
+          </View>
+
+          {/* User Password */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.labelText}>Password</Text>
+            <TextInput
+              secureTextEntry={true}
+              style={styles.input}
+              placeholder="Enter Password"
+              onChangeText={event => setUserPassword(event)}
+            />
+          </View>
         </View>
 
-        {/* User Email */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.labelText}>Email</Text>
-          <TextInput
-            keyboardType="email-address"
-            style={styles.input}
-            placeholder="Enter Email"
-            onChangeText={event => {
-              setUserEmail(event);
-            }}
-          />
-        </View>
-
-        {/* User Password */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.labelText}>Password</Text>
-          <TextInput
-            secureTextEntry={true}
-            style={styles.input}
-            placeholder="Enter Password"
-            onChangeText={event => {
-              setUserPassword(event);
-            }}
-          />
+        {/* Bottom Buttons */}
+        <View style={{paddingBottom: '5%'}}>
+          {/* Padding for spacing at bottom */}
+          {/* Create Account Button */}
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={[styles.buttonStyle, {backgroundColor: Colors.PRIMARY}]}
+            onPress={handleNewUserSignUp}>
+            <Text style={styles.buttonTextStyle}>Create Account</Text>
+          </TouchableOpacity>
+          {/* Go to Login screen */}
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate('LoginScreen')}
+            style={[styles.buttonStyle, styles.signInButton]}>
+            <Text style={[styles.buttonTextStyle, styles.signInText]}>
+              Sign In
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      <View
-        style={{
-          flex: 1,
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          margin: 24,
-        }}>
-        {/* Create Account Button */}
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={[styles.buttonStyle, {backgroundColor: Colors.PRIMARY}]}
-          onPress={() => {
-            handleNewUserSignUp();
-          }}>
-          <Text style={styles.buttonTextStyle}>Create Account</Text>
-        </TouchableOpacity>
-
-        {/* Go to Login screen */}
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => {
-            navigation.navigate('LoginScreen');
-          }}
-          style={[styles.buttonStyle, styles.signInButton]}>
-          <Text style={[styles.buttonTextStyle, styles.signInText]}>
-            Sign In
-          </Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
@@ -135,8 +117,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 25,
     paddingTop: 30,
+    flex: 1,
     backgroundColor: Colors.WHITE,
-    height: '100%',
   },
   headerText: {
     fontSize: 30,
@@ -161,7 +143,6 @@ const styles = StyleSheet.create({
   buttonStyle: {
     padding: 15,
     alignItems: 'center',
-    backgroundColor: Colors.PRIMARY,
     borderRadius: 15,
     marginTop: '25%',
   },

@@ -100,8 +100,15 @@ function DashboardTabNavigation(): React.JSX.Element {
     <Tab.Navigator
       activeColor="#000"
       inactiveColor="#000"
+      style={{}}
+      labeled={false}
       activeIndicatorStyle={{backgroundColor: '#0B86E7'}}
-      barStyle={{backgroundColor: 'white'}}
+      barStyle={{
+        backgroundColor: 'white',
+        alignContent: 'center',
+        height: 60,
+        paddingBottom: 5,
+      }}
       initialRouteName="HomeScreen">
       {tabs.map((tab, index) => (
         <Tab.Screen
@@ -109,7 +116,6 @@ function DashboardTabNavigation(): React.JSX.Element {
           name={tab.name}
           component={tab.component}
           options={{
-            tabBarLabel: tab.label,
             tabBarIcon: ({focused}) =>
               getTabBarIcon(focused, tab.solidIcon, tab.outlineIcon),
           }}

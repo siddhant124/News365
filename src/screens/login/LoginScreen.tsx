@@ -8,6 +8,7 @@ import {
   StyleSheet,
   BackHandler,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../../constants/Colors';
@@ -88,79 +89,61 @@ export default function LoginScreen({navigation}: {navigation: any}) {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: '#FFF',
-      }}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
+      <StatusBar backgroundColor={'#FFF'} barStyle={'dark-content'} />
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
+        contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}
         style={styles.container}>
-        <Text style={styles.headerText}>Let's Sign you in</Text>
+        <View>
+          <Text style={styles.headerText}>Let's Sign you in</Text>
+          <Text style={styles.subHeaderText}>Welcome back</Text>
 
-        <Text style={styles.subHeaderText}>Welcome back</Text>
+          {/* User Email */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.labelText}>Email</Text>
+            <TextInput
+              keyboardType="email-address"
+              style={styles.input}
+              placeholder="Enter Email"
+              onChangeText={event => setUserEmail(event)}
+            />
+          </View>
 
-        {/* User Email */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.labelText}>Email</Text>
-          <TextInput
-            keyboardType="email-address"
-            style={styles.input}
-            placeholder="Enter Email"
-            onChangeText={event => {
-              setUserEmail(event);
-            }}
-          />
+          {/* User Password */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.labelText}>Password</Text>
+            <TextInput
+              secureTextEntry={true}
+              style={styles.input}
+              placeholder="Enter Password"
+              onChangeText={event => setUserPassword(event)}
+            />
+          </View>
         </View>
 
-        {/* User Password */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.labelText}>Password</Text>
-          <TextInput
-            secureTextEntry={true}
-            style={styles.input}
-            placeholder="Enter Password"
-            onChangeText={event => {
-              setUserPassword(event);
-            }}
-          />
+        {/* Bottom Buttons */}
+        <View style={{paddingBottom: '5%'}}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={[styles.buttonStyle, {backgroundColor: Colors.PRIMARY}]}
+            onPress={handleUserLogin}>
+            <Text style={styles.buttonTextStyle}>Login</Text>
+          </TouchableOpacity>
+
+          {/* Go to Login screen */}
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => navigation.navigate('SignUpScreen')}
+            style={[styles.buttonStyle, styles.signUpButton]}>
+            <Text style={[styles.buttonTextStyle, styles.signUpText]}>
+              Create Account
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      <View
-        style={{
-          flex: 1,
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          margin: 24,
-        }}>
-        {/* Sign In Button */}
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={[
-            styles.buttonStyle,
-            {
-              backgroundColor: Colors.PRIMARY,
-            },
-          ]}
-          onPress={() => handleUserLogin()}>
-          <Text style={styles.buttonTextStyle}>Sign In</Text>
-        </TouchableOpacity>
-
-        {/* Go to Sign Up screen */}
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => {
-            navigation.navigate('SignUpScreen');
-          }}
-          style={[styles.buttonStyle, styles.signUpButton]}>
-          <Text style={[styles.buttonTextStyle, styles.signUpText]}>
-            Create Account
-          </Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
@@ -168,9 +151,8 @@ export default function LoginScreen({navigation}: {navigation: any}) {
 const styles = StyleSheet.create({
   container: {
     padding: 25,
-    paddingTop: 50,
+    paddingTop: 30,
     backgroundColor: Colors.WHITE,
-    height: '100%',
   },
   headerText: {
     fontSize: 30,
