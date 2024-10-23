@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useCallback} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -73,8 +74,8 @@ export default function HomeScreen() {
       <View
         style={{
           flex: 1,
-          justifyContent: 'center', // Centers vertically
-          alignItems: 'center', // Centers horizontally
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
