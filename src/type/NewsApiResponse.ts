@@ -5,7 +5,7 @@ interface Source {
 }
 
 // Define the structure of each article
-interface Article {
+export interface Article {
   source: Source;
   author: string;
   title: string;
