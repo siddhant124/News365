@@ -19,7 +19,7 @@ import {styles} from './HomeScreenStyle';
 import {CarouselCard} from './components/CarouselCard';
 import {RecommendedNewsList} from './components/RecommendedNews';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}: {navigation: any}) {
   const [newsCarouselData, setNewsCarouselData] = useState<NewsResponse[]>([]);
   const [popularNewsData, setPopularNewsData] = useState<NewsResponse[]>([]);
 
@@ -109,7 +109,9 @@ export default function HomeScreen() {
 
         <BasicCarousel
           data={newsCarouselData}
-          renderItem={item => <CarouselCard article={item} />}
+          renderItem={item => (
+            <CarouselCard article={item} navigation={navigation} />
+          )}
         />
 
         {/* Recommended News Section */}
@@ -123,7 +125,7 @@ export default function HomeScreen() {
           <View style={{flex: 1}}>
             <FlatList
               data={popularNewsData}
-              showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
               renderItem={RecommendedNewsList}
             />
           </View>

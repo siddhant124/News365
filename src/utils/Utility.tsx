@@ -1,4 +1,4 @@
-import {Alert, Linking} from 'react-native';
+import {Alert, Linking, Share} from 'react-native';
 
 /**
  * Created by Anurag on 14 June 2024
@@ -102,3 +102,29 @@ export function timeAgo(dateString: string): string {
     return `${yearsAgo} years ago`;
   }
 }
+
+// Open link in external browser
+export const openLinkInBrowser = (link: string) => {
+  Linking.openURL(link);
+};
+
+// Share text to 3rd part aplications
+export const onShare = async (link: string) => {
+  try {
+    const result = await Share.share({
+      message: `Check out this latest news I found it on News365 ${link}`,
+    });
+
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        console.log('Shared with activity type:', result.activityType);
+      } else {
+        console.log('Shared successfully');
+      }
+    } else if (result.action === Share.dismissedAction) {
+      console.log('Share dismissed');
+    }
+  } catch (error) {
+    console.warn('Error', `An error occurred while sharing: ${error}`);
+  }
+};

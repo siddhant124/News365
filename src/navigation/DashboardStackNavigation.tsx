@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   HomeIcon as HomeIconOutline,
   BookmarkIcon as BookmarkIconOutline,
@@ -19,8 +19,10 @@ import DiscoverScreen from '../screens/DiscoverScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import {BackHandler} from 'react-native';
+import NewsDetailsScreen from '../screens/NewsDetailsScreen';
 
 const Tab = createMaterialBottomTabNavigator();
+const Stack = createNativeStackNavigator(); // Stack Navigator to wrap the Tab Navigator
 
 // Utility function to get the appropriate icon (solid/outline) based on focus
 const getTabBarIcon = (
@@ -33,7 +35,7 @@ const getTabBarIcon = (
   return <IconComponent color={color} size={24} />;
 };
 
-function DashboardTabNavigation(): React.JSX.Element {
+function DashboardTabs() {
   const [backPressedOnce, setBackPressedOnce] = useState(false);
 
   useEffect(() => {
@@ -100,7 +102,6 @@ function DashboardTabNavigation(): React.JSX.Element {
     <Tab.Navigator
       activeColor="#000"
       inactiveColor="#000"
-      style={{}}
       labeled={false}
       activeIndicatorStyle={{backgroundColor: '#0B86E7'}}
       barStyle={{
@@ -125,4 +126,26 @@ function DashboardTabNavigation(): React.JSX.Element {
   );
 }
 
-export default DashboardTabNavigation;
+export default function DashboardTabNavigation() {
+  return (
+    <Stack.Navigator>
+      {/* The Tab Navigator with the multiple tabs */}
+      <Stack.Screen
+        name="DashboardTabs"
+        component={DashboardTabs}
+        options={{headerShown: false}} // Hide the header for the tab navigator
+      />
+
+      {/* The shared screen that any tab can access */}
+      <Stack.Screen
+        name="NewsDetailsScreen"
+        component={NewsDetailsScreen}
+        options={{
+          headerShown: false,
+          statusBarColor: 'rgba(0,0,0,0)', // Ensures no background color
+          statusBarStyle: 'dark',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
