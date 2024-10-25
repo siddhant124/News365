@@ -11,26 +11,16 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
-  headerContainer: {
-    padding: 24,
-  },
   bellIconContainer: {
     alignSelf: 'flex-end',
     backgroundColor: '#F6F6F7',
     padding: 8,
     borderRadius: 999,
   },
-  headerTextContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 12,
-  },
   headerTitle: {
     fontSize: 24,
     color: '#000',
     fontWeight: 'bold',
-    letterSpacing: 1,
   },
   headerViewAll: {
     fontSize: 16,
