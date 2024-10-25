@@ -1,11 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   TouchableOpacity,
   View,
   StyleSheet,
-  StatusBar,
   ScrollView,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -18,6 +17,10 @@ import {
 import {StopIcon} from 'react-native-heroicons/solid';
 import {onShare, openLinkInBrowser, timeAgo} from '../utils/Utility';
 import {Article} from '../type/NewsApiResponse';
+import {useDispatch, useSelector} from 'react-redux';
+import {addBookmark, removeBookmark} from '../redux/action';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootState} from '../redux/store';
 
 export default function NewsDetailsScreen({
   navigation,
@@ -37,14 +40,83 @@ export default function NewsDetailsScreen({
     newsData?.publishedAt ?? '2024-10-11T17:03:49Z',
   );
 
+  const [isBookmarkedNews, setIsBookmarkedNews] = useState(false);
+  const dispatch = useDispatch();
+
+  const bookmarkedArticles = useSelector(
+    (state: RootState) => state.bookmarkedArticles,
+  );
+
+  useEffect(() => {
+    const isBookmarked = bookmarkedArticles.some(
+      (article: Article) => article.url === newsData.url,
+    );
+    setIsBookmarkedNews(isBookmarked);
+  }, [bookmarkedArticles, newsData.url]);
+
+  // Check if the news article is already bookmarked
+  useEffect(() => {
+    const checkIfBookmarked = async () => {
+      try {
+        const storedNews = await AsyncStorage.getItem('bookmarkedNews');
+        const parsedNews: Article[] = storedNews ? JSON.parse(storedNews) : [];
+        const isAlreadyBookmarked = parsedNews.some(
+          item => item.url === newsData.url,
+        );
+        setIsBookmarkedNews(isAlreadyBookmarked);
+      } catch (error) {
+        console.log('Error checking bookmarked news:', error);
+      }
+    };
+    checkIfBookmarked();
+  }, [newsData]);
+
+  const handleAddBookmark = async () => {
+    const newNews = {
+      source: newsData?.source,
+      author: newsData?.author,
+      title: newsData?.title,
+      description: newsData?.description,
+      url: newsData?.url,
+      urlToImage: newsData?.urlToImage,
+      publishedAt: newsData?.publishedAt,
+      content: newsData?.content,
+      category: newsCategory,
+    };
+
+    if (isBookmarkedNews) {
+      dispatch(removeBookmark(newNews.url));
+    } else {
+      dispatch(addBookmark(newNews));
+    }
+
+    setIsBookmarkedNews(!isBookmarkedNews);
+    await saveBookmarkedNewsToStorage(newNews, !isBookmarkedNews);
+  };
+
+  const saveBookmarkedNewsToStorage = async (
+    newNews: Article,
+    shouldAdd: boolean,
+  ) => {
+    try {
+      const storedNews = await AsyncStorage.getItem('bookmarkedNews');
+      let parsedNews: Article[] = storedNews ? JSON.parse(storedNews) : [];
+
+      // Add or remove news from storage based on bookmark state
+      if (shouldAdd) {
+        parsedNews.push(newNews);
+      } else {
+        parsedNews = parsedNews.filter(item => item.url !== newNews.url);
+      }
+
+      await AsyncStorage.setItem('bookmarkedNews', JSON.stringify(parsedNews));
+    } catch (error) {
+      console.log('Error saving news:', error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* Image overlapping the Status Bar */}
-      <StatusBar
-        barStyle={'dark-content'}
-        backgroundColor={'rgba(0,0,0,0)'}
-        translucent={true}
-      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
@@ -66,9 +138,15 @@ export default function NewsDetailsScreen({
             <View style={styles.actionButtons}>
               <TouchableOpacity
                 activeOpacity={0.6}
-                onPress={() => console.log('bookmark this news')}
+                onPress={() => {
+                  handleAddBookmark();
+                  console.log('bookmark this news');
+                }}
                 style={styles.iconButton}>
-                <BookmarkIcon color="#FFF" size={18} />
+                <BookmarkIcon
+                  color={isBookmarkedNews ? 'red' : '#FFF'}
+                  size={18}
+                />
               </TouchableOpacity>
 
               <TouchableOpacity

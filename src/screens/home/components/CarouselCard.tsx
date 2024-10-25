@@ -47,7 +47,7 @@ export const CarouselCard = React.memo(
                 </Text>
               </View>
             </View>
-            <Text style={styles.titleText}>
+            <Text numberOfLines={2} style={styles.titleText}>
               {articleDetails?.title ?? 'Title Unavailable'}
             </Text>
           </View>

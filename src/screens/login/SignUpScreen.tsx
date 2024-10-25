@@ -7,7 +7,6 @@ import {
   TextInput,
   SafeAreaView,
   ScrollView,
-  StatusBar,
 } from 'react-native';
 import React, {useState} from 'react';
 import {Colors} from '../../constants/Colors';
@@ -40,8 +39,6 @@ export default function SignUpScreen({navigation}: {navigation: any}) {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
-      <StatusBar backgroundColor={'#FFF'} barStyle={'dark-content'} />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}

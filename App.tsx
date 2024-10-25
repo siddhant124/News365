@@ -10,6 +10,8 @@ import {auth} from './src/config/FirebaseConfig';
 import DashboardTabNavigation from './src/navigation/DashboardStackNavigation';
 import NetInfo from '@react-native-community/netinfo';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,35 +52,30 @@ function App(): React.JSX.Element {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      {/* Notification banner at the top if the internet is not available */}
-      {!isInternetAvailable && (
-        <View style={styles.notificationBanner}>
-          <Text style={styles.bannerText}>No Internet Connection</Text>
-        </View>
-      )}
-
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}>
-          {userDetails ? (
-            // If the user is logged in, navigate to the Dashboard
-            <Stack.Screen
-              name="DashboardTabNavigation"
-              component={DashboardTabNavigation}
-            />
-          ) : (
-            // Otherwise, navigate to the login screens
-            <>
-              <Stack.Screen name="LoginScreen" component={LoginScreen} />
-              <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-            </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={{flex: 1}}>
+        {!isInternetAvailable && (
+          <View style={styles.notificationBanner}>
+            <Text style={styles.bannerText}>No Internet Connection</Text>
+          </View>
+        )}
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+            {userDetails ? (
+              <Stack.Screen
+                name="DashboardTabNavigation"
+                component={DashboardTabNavigation}
+              />
+            ) : (
+              <>
+                <Stack.Screen name="LoginScreen" component={LoginScreen} />
+                <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </Provider>
   );
 }
 

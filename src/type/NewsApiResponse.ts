@@ -14,6 +14,7 @@ export interface Article {
   urlToImage: string | null;
   publishedAt: string;
   content: string;
+  category?: string;
 }
 
 // Define the structure of the entire API response

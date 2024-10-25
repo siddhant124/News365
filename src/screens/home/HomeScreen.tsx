@@ -126,7 +126,9 @@ export default function HomeScreen({navigation}: {navigation: any}) {
             <FlatList
               data={popularNewsData}
               scrollEnabled={false}
-              renderItem={RecommendedNewsList}
+              renderItem={({item}) => (
+                <RecommendedNewsList item={item} navigation={navigation} />
+              )}
             />
           </View>
         </View>

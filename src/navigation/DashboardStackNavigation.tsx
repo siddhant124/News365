@@ -14,7 +14,7 @@ import {
   GlobeAltIcon,
   UserIcon,
 } from 'react-native-heroicons/solid';
-import BookmarkScreen from '../screens/BookmarkScreen';
+import BookmarkScreen from '../screens/bookmark/BookmarkScreen';
 import DiscoverScreen from '../screens/DiscoverScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -102,13 +102,10 @@ function DashboardTabs() {
     <Tab.Navigator
       activeColor="#000"
       inactiveColor="#000"
-      labeled={false}
       activeIndicatorStyle={{backgroundColor: '#0B86E7'}}
       barStyle={{
         backgroundColor: 'white',
         alignContent: 'center',
-        height: 60,
-        paddingBottom: 5,
       }}
       initialRouteName="HomeScreen">
       {tabs.map((tab, index) => (
@@ -117,6 +114,7 @@ function DashboardTabs() {
           name={tab.name}
           component={tab.component}
           options={{
+            title: tab.label,
             tabBarIcon: ({focused}) =>
               getTabBarIcon(focused, tab.solidIcon, tab.outlineIcon),
           }}
@@ -142,8 +140,6 @@ export default function DashboardTabNavigation() {
         component={NewsDetailsScreen}
         options={{
           headerShown: false,
-          statusBarColor: 'rgba(0,0,0,0)', // Ensures no background color
-          statusBarStyle: 'dark',
         }}
       />
     </Stack.Navigator>
