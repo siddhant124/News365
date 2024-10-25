@@ -1,15 +1,30 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {StopIcon} from 'react-native-heroicons/micro';
 import {NewsResponse} from '../../../type/NewsApiResponse';
 import {timeAgo} from '../../../utils/Utility';
 import React from 'react';
 
-export const RecommendedNewsList = ({item}: {item: NewsResponse}) => {
+export const RecommendedNewsList = ({
+  item,
+  navigation,
+}: {
+  item: NewsResponse;
+  navigation: any;
+}) => {
   return (
     <View>
       {item.articles.map((article, idx) => (
-        <View key={idx} style={styles.articleContainer}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() =>
+            navigation.navigate('NewsDetailsScreen', {
+              newsCategory: item?.category?.toUpperCase() ?? 'Unknown Category',
+              newsData: article,
+            })
+          }
+          key={idx}
+          style={styles.articleContainer}>
           <FastImage
             source={{
               uri: article.urlToImage ?? 'https://unsplash.it/400/400?image=1',
@@ -18,7 +33,7 @@ export const RecommendedNewsList = ({item}: {item: NewsResponse}) => {
           />
           <View style={styles.textContainer}>
             <Text style={styles.categoryText}>
-              {item.category ?? 'Unknown Category'}
+              {item.category?.toUpperCase() ?? 'Unknown Category'}
             </Text>
             <View style={styles.titleContainer}>
               <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
@@ -35,7 +50,7 @@ export const RecommendedNewsList = ({item}: {item: NewsResponse}) => {
               </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );
