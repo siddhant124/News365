@@ -96,14 +96,19 @@ export default function HomeScreen({navigation}: {navigation: any}) {
         showsVerticalScrollIndicator={false}
         bounces={false}
         style={styles.parentView}>
-        <View style={styles.headerContainer}>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: 24,
+            paddingTop: 24,
+            paddingBottom: 14,
+          }}>
+          <Text style={styles.headerTitle}>Breaking News</Text>
           <View style={styles.bellIconContainer}>
             <BellIcon color={'#000'} size={20} />
-          </View>
-
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.headerTitle}>Breaking News</Text>
-            <Text style={styles.headerViewAll}>View all</Text>
           </View>
         </View>
 

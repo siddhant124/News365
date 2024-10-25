@@ -12,29 +12,39 @@ import React, {useState} from 'react';
 import {Colors} from '../../constants/Colors';
 import {ArrowLongLeftIcon} from 'react-native-heroicons/solid';
 import {auth} from '../../config/FirebaseConfig';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
 
 export default function SignUpScreen({navigation}: {navigation: any}) {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
+  const [isUserCreating, setIsUserCreating] = useState(false);
 
   const handleNewUserSignUp = () => {
     console.log('first', userEmail, userPassword, userName);
+    setIsUserCreating(true);
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
+      .then(userCredential => {
+        const user = userCredential.user;
+        // Set the display name (username) for the user
+        return updateProfile(user, {
+          displayName: userName,
+        });
+      })
       .then(() => {
+        console.log('User registered with username:', userName);
         navigation.navigate('DashboardTabNavigation');
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           console.warn('That email address is already in use!');
-        }
-
-        if (error.code === 'auth/invalid-email') {
+        } else if (error.code === 'auth/invalid-email') {
           console.warn('That email address is invalid!');
+        } else {
+          console.warn('error', error);
         }
-        console.warn('error', error);
-      });
+      })
+      .finally(() => setIsUserCreating(false));
   };
 
   return (
@@ -90,10 +100,15 @@ export default function SignUpScreen({navigation}: {navigation: any}) {
           {/* Padding for spacing at bottom */}
           {/* Create Account Button */}
           <TouchableOpacity
-            activeOpacity={0.6}
-            style={[styles.buttonStyle, {backgroundColor: Colors.PRIMARY}]}
-            onPress={handleNewUserSignUp}>
-            <Text style={styles.buttonTextStyle}>Create Account</Text>
+            activeOpacity={isUserCreating ? 1 : 0.6}
+            style={[
+              styles.buttonStyle,
+              {backgroundColor: isUserCreating ? 'grey' : Colors.PRIMARY},
+            ]}
+            onPress={() => !isUserCreating && handleNewUserSignUp()}>
+            <Text style={styles.buttonTextStyle}>
+              {isUserCreating ? 'CREATING...' : 'CREATE ACCOUNT'}
+            </Text>
           </TouchableOpacity>
           {/* Go to Login screen */}
           <TouchableOpacity
@@ -101,7 +116,7 @@ export default function SignUpScreen({navigation}: {navigation: any}) {
             onPress={() => navigation.navigate('LoginScreen')}
             style={[styles.buttonStyle, styles.signInButton]}>
             <Text style={[styles.buttonTextStyle, styles.signInText]}>
-              Sign In
+              {'Already have account?\nLOGIN'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -146,6 +161,7 @@ const styles = StyleSheet.create({
   buttonTextStyle: {
     color: Colors.WHITE,
     fontSize: 17,
+    textAlign: 'center',
   },
   signInButton: {
     backgroundColor: Colors.WHITE,

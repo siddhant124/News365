@@ -30,7 +30,7 @@ export {showAlert};
  * @returns Boolean indicating if the URL is excluded
  */
 const isExcludeAPI = (url: string) => {
-  return url.includes('/partners') || url.includes('/help-topics');
+  return url.includes('newsapi.org/v2');
 };
 
 export {isExcludeAPI};

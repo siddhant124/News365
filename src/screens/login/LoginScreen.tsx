@@ -19,6 +19,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [backPressedOnce, setBackPressedOnce] = useState(false);
+  const [isUserLogging, setIsUserLogging] = useState(false);
 
   useEffect(() => {
     const handleBackPress = () => {
@@ -51,6 +52,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
 
   const handleUserLogin = () => {
     console.log('first', userEmail, userPassword);
+    setIsUserLogging(true);
     signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then(() => {
         navigation.navigate('DashboardTabNavigation');
@@ -85,7 +87,8 @@ export default function LoginScreen({navigation}: {navigation: any}) {
             break;
         }
         console.warn('Login failed:', errorMessage);
-      });
+      })
+      .finally(() => setIsUserLogging(false));
   };
 
   return (
@@ -127,10 +130,15 @@ export default function LoginScreen({navigation}: {navigation: any}) {
         {/* Bottom Buttons */}
         <View style={{paddingBottom: '5%'}}>
           <TouchableOpacity
-            activeOpacity={0.6}
-            style={[styles.buttonStyle, {backgroundColor: Colors.PRIMARY}]}
-            onPress={handleUserLogin}>
-            <Text style={styles.buttonTextStyle}>Login</Text>
+            activeOpacity={isUserLogging ? 1 : 0.6}
+            style={[
+              styles.buttonStyle,
+              {backgroundColor: isUserLogging ? 'gray' : Colors.PRIMARY},
+            ]}
+            onPress={() => !isUserLogging && handleUserLogin()}>
+            <Text style={styles.buttonTextStyle}>
+              {isUserLogging ? 'LOGGING...' : 'LOGIN'}
+            </Text>
           </TouchableOpacity>
 
           {/* Go to Login screen */}
@@ -139,7 +147,7 @@ export default function LoginScreen({navigation}: {navigation: any}) {
             onPress={() => navigation.navigate('SignUpScreen')}
             style={[styles.buttonStyle, styles.signUpButton]}>
             <Text style={[styles.buttonTextStyle, styles.signUpText]}>
-              Create Account
+              {"Don't have account?\nCREATE ACCOUNT"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -188,6 +196,7 @@ const styles = StyleSheet.create({
   buttonTextStyle: {
     color: Colors.WHITE,
     fontSize: 17,
+    textAlign: 'center',
   },
   signUpButton: {
     backgroundColor: Colors.WHITE,
