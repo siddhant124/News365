@@ -26,3 +26,12 @@ export async function fetchNewsByPopularityData(
     `${BASE_URL}/top-headlines?category=${category}&pageSize=3&page=1&country=us&apiKey=${API_KEY}&sortBy=popularity`,
   );
 }
+
+export async function searchNewsData(
+  query: string,
+  pageSize: number,
+): Promise<Response<NewsResponse>> {
+  return await AxiosApiService().get(
+    `${BASE_URL}/everything?q=${query}&apiKey=${API_KEY}&pageSize=10&page=${pageSize}`,
+  );
+}
