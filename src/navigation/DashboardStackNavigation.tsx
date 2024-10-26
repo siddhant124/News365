@@ -1,24 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   HomeIcon as HomeIconOutline,
   BookmarkIcon as BookmarkIconOutline,
-  GlobeAltIcon as GlobeAltIconOutline,
   UserIcon as UserIconOutline,
+  GlobeAsiaAustraliaIcon as GlobeAsiaAustraliaIconOutline,
 } from 'react-native-heroicons/outline';
 import {
   HomeIcon,
   BookmarkIcon,
-  GlobeAltIcon,
   UserIcon,
+  GlobeAsiaAustraliaIcon,
 } from 'react-native-heroicons/solid';
 import BookmarkScreen from '../screens/bookmark/BookmarkScreen';
 import DiscoverScreen from '../screens/DiscoverScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import {BackHandler} from 'react-native';
 import NewsDetailsScreen from '../screens/NewsDetailsScreen';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -36,37 +35,6 @@ const getTabBarIcon = (
 };
 
 function DashboardTabs() {
-  const [backPressedOnce, setBackPressedOnce] = useState(false);
-
-  useEffect(() => {
-    const handleBackPress = () => {
-      if (backPressedOnce) {
-        // Exit the app if back is pressed again within 2 seconds
-        BackHandler.exitApp();
-        return true;
-      } else {
-        // Show toast and set backPressedOnce to true
-        console.warn('Press again to exit');
-        setBackPressedOnce(true);
-
-        // Reset backPressedOnce after 2 seconds
-        setTimeout(() => {
-          setBackPressedOnce(false);
-        }, 2000);
-
-        return true; // Prevent the default back button behavior
-      }
-    };
-
-    // Adding the back press event listener
-    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-
-    // Cleanup: Remove the event listener on component unmount
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-    };
-  }, [backPressedOnce]);
-
   const tabs = [
     {
       name: 'HomeScreen',
@@ -79,8 +47,8 @@ function DashboardTabs() {
       name: 'DiscoverScreen',
       component: DiscoverScreen,
       label: 'Discover',
-      solidIcon: GlobeAltIcon,
-      outlineIcon: GlobeAltIconOutline,
+      solidIcon: GlobeAsiaAustraliaIcon,
+      outlineIcon: GlobeAsiaAustraliaIconOutline,
     },
     {
       name: 'BookmarkScreen',

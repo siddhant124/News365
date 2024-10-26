@@ -24,5 +24,13 @@ class NewsViewModel {
     );
     return response;
   }
+
+  async searchNews(
+    query: string,
+    pageSize: number,
+  ): Promise<Response<NewsResponse>> {
+    const response = await this.newsRepository.searchNews(query, pageSize);
+    return response;
+  }
 }
 export default NewsViewModel;
