@@ -12,8 +12,7 @@ Bookmark & Share: Users can bookmark articles to revisit in the “Bookmarks” 
 **Discover & Search**: With global search functionality, users can find news on any topic of interest from around the world.
 User Profile: Displays user details to add a personalized touch.
 
-Building News365 allowed me to combine React Native with Firebase, Redux, and my custom NPM package, creating a feature-rich, user-friendly news platform. Special thanks to everyone who helped along the way!
-
+Building News365 allowed me to combine React Native with Firebase, Redux, and my custom NPM package, creating a feature-rich, user-friendly news platform.
 Looking forward to enhancing this further and would love your feedback! 🙌
 
 #ReactNative #Firebase #Redux #NewsApp #MobileDevelopment #NPM #OpenSource #TechInnovation #GitHub #LinkedIn
