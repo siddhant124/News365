@@ -123,7 +123,13 @@ export default function HomeScreen({navigation}: {navigation: any}) {
         <View style={styles.recommendedSectionView}>
           <View style={styles.recommendedHeaderContainerStyle}>
             <Text style={styles.recommendedHeading}>Recommendations</Text>
-            <Text style={styles.headerViewAll}>View all</Text>
+            <Text
+              onPress={() => {
+                navigation.navigate('ViewAllNews');
+              }}
+              style={styles.headerViewAll}>
+              View all
+            </Text>
           </View>
 
           {/* Wrap the FlatList in a container */}

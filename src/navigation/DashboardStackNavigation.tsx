@@ -19,6 +19,7 @@ import DiscoverScreen from '../screens/DiscoverScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import NewsDetailsScreen from '../screens/NewsDetailsScreen';
+import ViewAllNews from '../screens/home/ViewAllNews';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator(); // Stack Navigator to wrap the Tab Navigator
@@ -106,6 +107,13 @@ export default function DashboardTabNavigation() {
       <Stack.Screen
         name="NewsDetailsScreen"
         component={NewsDetailsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ViewAllNews"
+        component={ViewAllNews}
         options={{
           headerShown: false,
         }}

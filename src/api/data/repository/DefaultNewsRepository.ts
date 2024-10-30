@@ -3,12 +3,18 @@ import {NewsResponse} from '../../../type/NewsApiResponse';
 import {
   fetchNewsByCategoryData,
   fetchNewsByPopularityData,
+  getCategoryBasedNewsData,
   getNewsListData,
   searchNewsData,
 } from '../NewsApiService';
 import NewsRepository from './NewsRepository';
 
 class DefaultNewsRepository implements NewsRepository {
+  async getCategoryBasedNews(
+    category: string,
+  ): Promise<Response<NewsResponse>> {
+    return await getCategoryBasedNewsData(category);
+  }
   async fetchNewsListByPopularity(
     category: string,
   ): Promise<Response<NewsResponse>> {

@@ -35,3 +35,11 @@ export async function searchNewsData(
     `${BASE_URL}/everything?q=${query}&apiKey=${API_KEY}&pageSize=10&page=${pageSize}`,
   );
 }
+
+export async function getCategoryBasedNewsData(
+  category: string,
+): Promise<Response<NewsResponse>> {
+  return await AxiosApiService().get(
+    `${BASE_URL}/top-headlines?country=us&apiKey=${API_KEY}&category=${category}`,
+  );
+}

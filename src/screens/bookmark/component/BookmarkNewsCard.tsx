@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
@@ -9,35 +9,60 @@ import {
 } from 'react-native-heroicons/outline';
 import {onShare} from '../../../utils/Utility';
 import {Article} from '../../../type/NewsApiResponse';
-import {removeBookmark} from '../../../redux/action';
+import {addBookmark, removeBookmark} from '../../../redux/action';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RootState} from '../../../redux/store';
 
 export const BookmarkNewsCard = ({
-  item,
+  newsArticle,
   navigation,
+  newsCategory,
 }: {
-  item: Article;
+  newsArticle: Article;
   navigation: any;
+  newsCategory?: string;
 }) => {
   const dispatch = useDispatch();
-
+  // Get bookmarked articles from Redux
   const bookmarkedArticles = useSelector(
     (state: RootState) => state.bookmarkedArticles,
   );
 
-  const handleRemoveBookmark = async () => {
-    dispatch(removeBookmark(item.url));
-    try {
-      const updatedBookmarks = bookmarkedArticles.filter(
-        (article: Article) => article.url !== item.url,
-      );
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
-      await AsyncStorage.setItem(
-        'bookmarkedNews',
-        JSON.stringify(updatedBookmarks),
-      );
+  // Check if the news article is bookmarked
+  useEffect(() => {
+    const checkIfBookmarked = bookmarkedArticles.some(
+      (article: Article) => article.url === newsArticle.url,
+    );
+    setIsBookmarked(checkIfBookmarked);
+  }, [bookmarkedArticles, newsArticle.url]);
+
+  const handleToggleBookmark = async () => {
+    if (isBookmarked) {
+      dispatch(removeBookmark(newsArticle.url));
+    } else {
+      dispatch(addBookmark({...newsArticle, category: newsCategory}));
+    }
+    setIsBookmarked(!isBookmarked);
+
+    // Update AsyncStorage
+    try {
+      const storedNews = await AsyncStorage.getItem('bookmarkedNews');
+      let parsedNews: Article[] = storedNews ? JSON.parse(storedNews) : [];
+
+      if (isBookmarked) {
+        // Remove from bookmarks
+        parsedNews = parsedNews.filter(
+          article => article.url !== newsArticle.url,
+        );
+      } else {
+        // Add to bookmarks
+        parsedNews.push(newsArticle);
+      }
+
+      await AsyncStorage.setItem('bookmarkedNews', JSON.stringify(parsedNews));
     } catch (error) {
       console.log('Error updating storage:', error);
     }
@@ -47,8 +72,8 @@ export const BookmarkNewsCard = ({
     <TouchableOpacity
       onPress={() =>
         navigation.navigate('NewsDetailsScreen', {
-          newsCategory: item?.category ?? 'Unknown Category',
-          newsData: item,
+          newsCategory: newsArticle.category,
+          newsData: newsArticle,
         })
       }
       activeOpacity={0.6}
@@ -69,7 +94,8 @@ export const BookmarkNewsCard = ({
         }}>
         <FastImage
           source={{
-            uri: item?.urlToImage ?? 'https://unsplash.it/400/400?image=1',
+            uri:
+              newsArticle?.urlToImage ?? 'https://unsplash.it/400/400?image=1',
           }}
           resizeMode="cover"
           style={{
@@ -93,7 +119,7 @@ export const BookmarkNewsCard = ({
               fontWeight: 'bold',
               color: 'black',
             }}>
-            {item.title}
+            {newsArticle.title}
           </Text>
 
           <View
@@ -104,17 +130,19 @@ export const BookmarkNewsCard = ({
               justifyContent: 'space-between',
               width: '100%',
             }}>
-            <View
-              style={{
-                backgroundColor: '#2196F3',
-                paddingHorizontal: 12,
-                paddingVertical: 6,
-                borderRadius: 20,
-              }}>
-              <Text style={{color: 'white', fontSize: 14, fontWeight: '600'}}>
-                {item?.category ?? ''}
-              </Text>
-            </View>
+            {newsArticle?.category && (
+              <View
+                style={{
+                  backgroundColor: '#2196F3',
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  borderRadius: 20,
+                }}>
+                <Text style={{color: 'white', fontSize: 14, fontWeight: '600'}}>
+                  {newsArticle.category.toLocaleUpperCase()}
+                </Text>
+              </View>
+            )}
             <View
               style={{
                 flexDirection: 'row',
@@ -123,20 +151,19 @@ export const BookmarkNewsCard = ({
               <TouchableOpacity
                 activeOpacity={0.6}
                 onPress={() => {
-                  handleRemoveBookmark();
-                  console.log('Bookmark this news');
+                  handleToggleBookmark();
                 }}
                 style={{
                   backgroundColor: '#000',
                   borderRadius: 1000,
                   padding: 8,
                 }}>
-                <BookmarkIcon color={'red'} size={15} />
+                <BookmarkIcon color={isBookmarked ? 'red' : '#FFF'} size={15} />
               </TouchableOpacity>
 
               <TouchableOpacity
                 activeOpacity={0.6}
-                onPress={() => onShare(item?.url)}
+                onPress={() => onShare(newsArticle?.url)}
                 style={{
                   backgroundColor: '#000',
                   borderRadius: 1000,

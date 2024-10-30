@@ -70,7 +70,7 @@ export default function BookmarkScreen({navigation}: {navigation: any}) {
           data={bookmarkedArticles}
           keyExtractor={item => item.url}
           renderItem={({item}) => (
-            <BookmarkNewsCard item={item} navigation={navigation} />
+            <BookmarkNewsCard newsArticle={item} navigation={navigation} />
           )}
         />
       )}

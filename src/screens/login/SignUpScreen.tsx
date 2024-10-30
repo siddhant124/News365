@@ -21,7 +21,6 @@ export default function SignUpScreen({navigation}: {navigation: any}) {
   const [isUserCreating, setIsUserCreating] = useState(false);
 
   const handleNewUserSignUp = () => {
-    console.log('first', userEmail, userPassword, userName);
     setIsUserCreating(true);
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then(userCredential => {

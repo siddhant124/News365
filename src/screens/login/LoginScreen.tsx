@@ -51,7 +51,6 @@ export default function LoginScreen({navigation}: {navigation: any}) {
   }, [backPressedOnce]);
 
   const handleUserLogin = () => {
-    console.log('first', userEmail, userPassword);
     setIsUserLogging(true);
     signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then(() => {
