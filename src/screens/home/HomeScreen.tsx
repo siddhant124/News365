@@ -10,6 +10,7 @@ import {
   FlatList,
   StatusBar,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import BasicCarousel from 'react-native-sg-basic-carousel';
 import NewsViewModel from '../../api/viewmodel/NewsViewModel';
@@ -18,10 +19,14 @@ import {NewsResponse} from '../../type/NewsApiResponse';
 import {styles} from './HomeScreenStyle';
 import {CarouselCard} from './components/CarouselCard';
 import {RecommendedNewsList} from './components/RecommendedNews';
+import {ArrowPathIcon, FaceFrownIcon} from 'react-native-heroicons/outline';
 
 export default function HomeScreen({navigation}: {navigation: any}) {
+  const {width: screenWidth} = Dimensions.get('window');
+
   const [newsCarouselData, setNewsCarouselData] = useState<NewsResponse[]>([]);
   const [popularNewsData, setPopularNewsData] = useState<NewsResponse[]>([]);
+  const [isLimitReached, setIsLimitReached] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,31 +45,35 @@ export default function HomeScreen({navigation}: {navigation: any}) {
             newsViewModel.fetchNewsListByPopularoty(cat),
           ]);
 
-          // Process regular news response
-          if (response.body) {
-            tempData.push({
-              category: cat,
-              articles: response.body.articles,
-              status: response.body.status,
-              totalResults: response.body.totalResults,
-            });
-          }
+          if (response?.successStatus?.isSuccessful === false) {
+            setIsLimitReached(true);
+          } else {
+            setIsLimitReached(false);
+            // Process regular news response
+            if (response.body) {
+              tempData.push({
+                category: cat,
+                articles: response.body.articles,
+                status: response.body.status,
+                totalResults: response.body.totalResults,
+              });
+            }
 
-          // Process popular news response
-          if (popularNewsResp.body) {
-            tempDataForPopularNews.push({
-              category: cat,
-              articles: popularNewsResp.body.articles,
-              status: popularNewsResp.body.status,
-              totalResults: popularNewsResp.body.totalResults,
-            });
+            // Process popular news response
+            if (popularNewsResp.body) {
+              tempDataForPopularNews.push({
+                category: cat,
+                articles: popularNewsResp.body.articles,
+                status: popularNewsResp.body.status,
+                totalResults: popularNewsResp.body.totalResults,
+              });
+            }
+            // Update state with fetched data
+            setNewsCarouselData(tempData);
+            setPopularNewsData(tempDataForPopularNews);
           }
         }),
       );
-
-      // Update state with fetched data
-      setNewsCarouselData(tempData);
-      setPopularNewsData(tempDataForPopularNews);
     } catch (error) {
       console.error('Error fetching data: ', error);
     } finally {
@@ -89,6 +98,33 @@ export default function HomeScreen({navigation}: {navigation: any}) {
     );
   }
 
+  if (isLimitReached) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#FFF',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <FaceFrownIcon color={'#000'} size={56} />
+        <Text
+          style={{
+            textAlign: 'center',
+            padding: 24,
+            fontSize: 18,
+            color: '#000',
+            fontStyle: 'italic',
+          }}>
+          You have made too many requests recently. Developer accounts are
+          limited to 100 requests over a 24 hour period (50 requests available
+          every 12 hours). Please upgrade to a paid plan if you need more
+          requests.
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar backgroundColor={'#FFF'} barStyle={'dark-content'} />
@@ -108,16 +144,48 @@ export default function HomeScreen({navigation}: {navigation: any}) {
           }}>
           <Text style={styles.headerTitle}>Breaking News</Text>
           <View style={styles.bellIconContainer}>
-            <BellIcon color={'#000'} size={20} />
+            <BellIcon
+              style={{
+                alignSelf: 'flex-end',
+              }}
+              color={'#000'}
+              size={20}
+            />
           </View>
         </View>
 
-        <BasicCarousel
-          data={newsCarouselData}
-          renderItem={item => (
-            <CarouselCard article={item} navigation={navigation} />
-          )}
-        />
+        {newsCarouselData?.length > 0 ? (
+          <BasicCarousel
+            data={newsCarouselData}
+            renderItem={item => (
+              <CarouselCard article={item} navigation={navigation} />
+            )}
+          />
+        ) : (
+          <View
+            style={{
+              width: screenWidth * 0.9,
+              height: 200,
+              marginHorizontal: screenWidth * 0.05,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 12,
+              padding: 1,
+              borderWidth: 0.5,
+              gap: 8,
+              overflow: 'hidden',
+            }}>
+            <ArrowPathIcon color={'#000'} />
+            <Text
+              style={{
+                fontWeight: 'bold',
+                color: 'gray',
+                fontSize: 15,
+              }}>
+              Failed to fetch news
+            </Text>
+          </View>
+        )}
 
         {/* Recommended News Section */}
         <View style={styles.recommendedSectionView}>
