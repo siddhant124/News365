@@ -32,5 +32,13 @@ class NewsViewModel {
     const response = await this.newsRepository.searchNews(query, pageSize);
     return response;
   }
+
+  async getCategoryBasedNews(
+    category: string,
+  ): Promise<Response<NewsResponse>> {
+    const response = await this.newsRepository.getCategoryBasedNews(category);
+    return response;
+  }
 }
+
 export default NewsViewModel;

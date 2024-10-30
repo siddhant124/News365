@@ -9,4 +9,6 @@ export default interface NewsRepository {
   fetchNewsListByPopularity(category: string): Promise<Response<NewsResponse>>;
 
   searchNews(query: string, pageSize: number): Promise<Response<NewsResponse>>;
+
+  getCategoryBasedNews(category: string): Promise<Response<NewsResponse>>;
 }

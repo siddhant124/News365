@@ -1,4 +1,5 @@
 export const category: string[] = [
+  'All',
   'business',
   'entertainment',
   'general',
