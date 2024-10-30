@@ -13,7 +13,10 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {MagnifyingGlassIcon} from 'react-native-heroicons/mini';
 import {XCircleIcon} from 'react-native-heroicons/solid';
-import {DocumentMagnifyingGlassIcon} from 'react-native-heroicons/outline';
+import {
+  DocumentMagnifyingGlassIcon,
+  FaceFrownIcon,
+} from 'react-native-heroicons/outline';
 import {ActivityIndicator} from 'react-native-paper';
 import {debounce} from 'lodash';
 import FastImage from 'react-native-fast-image';
@@ -66,6 +69,7 @@ export default function DiscoverScreen({navigation}: {navigation: any}) {
   const [page, setPage] = useState(1); // Page state for pagination
   const [maxNewsCount, setMaxNewsCount] = useState(0);
   const newsViewModel = useMemo(() => new NewsViewModel(), []);
+  const [isLimitReached, setIsLimitReached] = useState<boolean>(false);
 
   const debouncedSearch = useMemo(
     () =>
@@ -77,15 +81,21 @@ export default function DiscoverScreen({navigation}: {navigation: any}) {
           }
           setIsLoading(true);
           const response = await newsViewModel.searchNews(text, page);
-          setNewsList(prevList => [
-            ...prevList,
-            ...(response?.body?.articles ?? []),
-          ]);
-          setMaxNewsCount(
-            response?.body?.totalResults
-              ? Math.min(response.body.totalResults, 100)
-              : 0,
-          );
+          if (response?.successStatus?.isSuccessful === true) {
+            setIsLimitReached(false);
+            setNewsList(prevList => [
+              ...prevList,
+              ...(response?.body?.articles ?? []),
+            ]);
+            setMaxNewsCount(
+              response?.body?.totalResults
+                ? Math.min(response.body.totalResults, 100)
+                : 0,
+            );
+          } else {
+            setIsLimitReached(true);
+            console.log('error', response?.errorBody?.message);
+          }
         } catch (error) {
           console.error('Error fetching News:', error);
           setNewsList([]);
@@ -164,6 +174,30 @@ export default function DiscoverScreen({navigation}: {navigation: any}) {
 
         {isLoading && page === 1 ? (
           <LoadingState />
+        ) : isLimitReached ? (
+          <View
+            style={{
+              flex: 1,
+              marginTop: 5,
+              backgroundColor: '#FFF',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <FaceFrownIcon color={'#000'} size={56} />
+            <Text
+              style={{
+                textAlign: 'center',
+                padding: 24,
+                fontSize: 18,
+                color: '#000',
+                fontStyle: 'italic',
+              }}>
+              You have made too many requests recently. Developer accounts are
+              limited to 100 requests over a 24 hour period (50 requests
+              available every 12 hours). Please upgrade to a paid plan if you
+              need more requests.
+            </Text>
+          </View>
         ) : (
           <View style={styles.newsListContainer}>
             {newsList.length < 1 ? (
