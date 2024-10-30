@@ -65,7 +65,13 @@ export default function ViewAllNews({navigation}: {navigation: any}) {
                   borderColor: selectedFilter === item ? '#3187A2' : 'gray',
                   backgroundColor: selectedFilter === item ? '#2196F3' : '#FFF',
                 }}>
-                <Text>{item.toUpperCase()}</Text>
+                <Text
+                  style={{
+                    color: selectedFilter === item ? '#FFF' : '#000',
+                    fontWeight: selectedFilter === item ? 'bold' : 'normal',
+                  }}>
+                  {item.toUpperCase()}
+                </Text>
               </TouchableOpacity>
             )}
           />
