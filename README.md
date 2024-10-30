@@ -1,79 +1,31 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+## 🚀 Excited to share News365—my latest project, a comprehensive news application built with React Native! 📱📰
 
-# Getting Started
+With News365, staying informed has never been easier. Here’s a quick look at the features that make this app stand out:
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## 🔑 Key Features:
+**Seamless Login with Firebase**: Integrated Firebase email/password authentication, so users can create accounts or log in with ease. If already logged in, users are redirected directly to the home screen upon reopening the app.
+Trending News Carousel: Leveraged my custom-built NPM package, react-native-sg-basic-carousel, to display the latest trending news in a dynamic carousel, making it easy to keep up with the top stories.
 
-## Step 1: Start the Metro Server
+**Curated News Recommendations**: Recommended articles are shown below the carousel with an option to “View All” that lets users explore news across different categories.
+Bookmark & Share: Users can bookmark articles to revisit in the “Bookmarks” tab (built with Redux for smooth state management) or share articles instantly. A full article view opens in the browser for easy reading.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+**Discover & Search**: With global search functionality, users can find news on any topic of interest from around the world.
+User Profile: Displays user details to add a personalized touch.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+Building News365 allowed me to combine React Native with Firebase, Redux, and my custom NPM package, creating a feature-rich, user-friendly news platform. Special thanks to everyone who helped along the way!
 
-```bash
-# using npm
-npm start
+Looking forward to enhancing this further and would love your feedback! 🙌
 
-# OR using Yarn
-yarn start
-```
+#ReactNative #Firebase #Redux #NewsApp #MobileDevelopment #NPM #OpenSource #TechInnovation #GitHub #LinkedIn
+<img src="https://github.com/user-attachments/assets/b6ce94d8-511f-40f3-aea8-88ee95495be3" alt="s1" width="400"/>
+<img src="https://github.com/user-attachments/assets/bd60e032-de7a-4dae-b8cf-bc5bd5455a61" alt="s2" width="400"/>
 
-## Step 2: Start your Application
+<img src="https://github.com/user-attachments/assets/3f21fe3d-208c-4e77-8689-5d2c19600939" alt="s3" width="400"/>
+<img src="https://github.com/user-attachments/assets/a66056f7-7d9b-407c-a4ed-56b9f3e230c0" alt="s4" width="400"/>
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+<img src="https://github.com/user-attachments/assets/5c5b1904-2e3a-474c-a2ac-5257235a4de2" alt="s5" width="400"/>
+<img src="https://github.com/user-attachments/assets/ead31e1b-307a-41f8-b06d-fe5bc43b98fa" alt="s6" width="400"/>
 
-### For Android
+<img src="https://github.com/user-attachments/assets/654077b2-a061-4ed6-b98b-34d10a5555b7" alt="s7" width="400"/>
+<img src="https://github.com/user-attachments/assets/737a2bca-0a65-4ee7-9f8e-5c25583c5e80" alt="s8" width="400"/>
 
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
